@@ -1,0 +1,54 @@
+/**
+ * @file plugins/themes/default/styles/pages/viewFile.less
+ *
+ * Copyright (c) 2014-2021 Simon Fraser University
+ * Copyright (c) 2003-2021 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+ *
+ * @brief Styles applying to the lightweight page for viewing PDFs
+ * @link templates/frontend/pages/viewPdf.tpl
+ */
+
+.header_iiif_file {
+	z-index: 2;
+	position: relative;
+	background-color: #a5d7d2;
+	line-height: 1.5em;
+
+	a {
+		text-decoration: none;
+	}
+
+	.return {
+		text-align: center;
+
+		&:before {
+			.fa();
+			content: @fa-var-arrow-left;
+		}
+
+		&:hover,
+		&:focus {
+			background: @primary-lift;
+			color: #fff;
+		}
+	}
+
+	.title {
+		display: block;
+		font-size: @font-sml;
+		font-weight: @bold;
+		padding-left: @line-header + @base;
+		max-width: 100%;
+		overflow-x: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		color: #fff;
+	}
+
+}
+
+.viewer_return {
+	padding-bottom: 1em;
+}
+
