@@ -73,16 +73,13 @@ class IiifViewerPlugin extends GenericPlugin {
 
 		$contextid = $this->getCurrentContextId();
 
-error_log("iiifviewer::viewCallback called [".$hookName."] context[".$contextid."] submissionid[".$submission->getId()."] mimetype [".$mime_type."] format[".$format."] \n");
-
-
-
 		if ($format == 'iiif_manifest' && (($mime_type == 'application/json') || ($mime_type == 'text/plain'))) {
-			$this->viewManifestFile($publicationFormat, $mime_type, $submission, $submissionFile);
+			#$this->viewManifestFile($publicationFormat, $mime_type, $submission, $submissionFile, "display_manifest.tpl" );
+			$this->viewImageFile($publicationFormat, $mime_type, $submission, $submissionFile, "display_manifest.tpl" );
 			return true;
 
 		} elseif ($mime_type == 'image/jpeg') {
-			$this->viewImageFile($publicationFormat, $mime_type, $submission, $submissionFile);
+			$this->viewImageFile($publicationFormat, $mime_type, $submission, $submissionFile, "display.tpl" );
 			return true;
 		}
 
@@ -95,59 +92,11 @@ error_log("iiifviewer::viewCallback called [".$hookName."] context[".$contextid.
 	 * @param $mime_type string
 	 * @param $submission Submission
 	 * @param $submissionFile SubmissionFile
-	 * @return boolean
-	 */
-	function viewImageFile($publicationFormat, $mime_type, $submission, $submissionFile) {
-
-		foreach ($submission->getData('publications') as $publication) {
-			if ($publication->getId() === $publicationFormat->getData('publicationId')) {
-				$filePublication = $publication;
-				break;
-			}
-		}
-		$fileService = Services::get('file');
-		$imgfile = $fileService->get($submissionFile->getData('fileId'));
-		$imgpath = $imgfile->path;
-
-		$fileId = $submissionFile->getId();
-		$fileStage = $submissionFile->getFileStage();
-		$subStageId = $submission->getStageId();
-		$submissionId = $submission->getId();
-
-error_log("iiifviewer::viewImageFile called submissionid[".$submission->getId()."] fileid[".$fileId."] sub stage [".$subStageId."] filestage[".$fileStage."] mimetype [".$submissionFile->getData('mimetype')."] path[".$this->getPluginPath()."]\n");
-
-		$request = Application::get()->getRequest();
-
-		$contextPath = $request->getRequestedContextPath();
-		$apiUrl = $request->getIndexUrl()."/".$contextPath[0].'/$$$call$$$/api/file/file-api/download-file?submissionFileId='.$fileId."&submissionId=".$submissionId."&stageId=".$subStageId;
-
-		$router = $request->getRouter();
-		$dispatcher = $request->getDispatcher();
-		$templateMgr = TemplateManager::getManager($request);
-		$templateMgr->assign(array(
-			'apiUrl' => $apiUrl,
-			'pluginUrl' => $request->getBaseUrl() . '/' . $this->getPluginPath(),
-			'isLatestPublication' => $submission->getData('currentPublicationId') === $publicationFormat->getData('publicationId'),
-			'filePublication' => $filePublication,
-			'subId' => $submission->getId(),
-			'subStageId' => $submission->getStageId(),
-			'fileId' => $fileId,
-		));
-
-		$templateMgr->display($this->getTemplateResource('display.tpl'));
-//error_log("iiifviewer::viewCallback called [".$hookName."] mimetype [".$submissionFile->getData('mimetype')."] path[".$this->getPluginPath()."] showing template display.tpl for filePublication[".print_r($filePublication)."] filepath[".$imgpath."] returning TRUE\n");
-		return true;
-	}
-
-	/**
-	 * function to prepare IIIFViewer data for a manifest file.
-	 * @param $publicationFormat PublicationFormat
-	 * @param $mime_type string
 	 * @param $submission Submission
-	 * @param $submissionFile SubmissionFile
+	 * @param $theTemplate string
 	 * @return boolean
 	 */
-	function viewManifestFile($publicationFormat, $mime_type, $submission, $submissionFile) {
+	function viewImageFile($publicationFormat, $mime_type, $submission, $submissionFile, $theTemplate) {
 
 		foreach ($submission->getData('publications') as $publication) {
 			if ($publication->getId() === $publicationFormat->getData('publicationId')) {
@@ -164,19 +113,14 @@ error_log("iiifviewer::viewImageFile called submissionid[".$submission->getId().
 		$subStageId = $submission->getStageId();
 		$submissionId = $submission->getId();
 
-error_log("iiifviewer::viewManifestFile called submissionid[".$submissionId."] fileid[".$fileId."] sub stage [".$subStageId."] filestage[".$fileStage."] mimetype [".$submissionFile->getData('mimetype')."] path[".$this->getPluginPath()."]\n");
+error_log("iiifviewer::viewImageFile called submissionid[".$submissionId."] fileid[".$fileId."] sub stage [".$subStageId."] filestage[".$fileStage."] mimetype [".$submissionFile->getData('mimetype')."] path[".$this->getPluginPath()."]\n");
 
 		$request = Application::get()->getRequest();
-
-error_log("###iiifviewer context[".print_r($request->getRequestedContextPath(), true)."]\n");
-error_log("###iiifviewer baseurl[".print_r($request->getBaseUrl(), true)."]\n");
-error_log("###iiifviewer indexurl[".print_r($request->getIndexUrl(), true)."]\n");
-		$contextPath = $request->getRequestedContextPath();
-
-		$apiUrl = $request->getIndexUrl()."/".$contextPath[0].'/$$$call$$$/api/file/file-api/download-file?submissionFileId='.$fileId."&submissionId=".$submissionId."&stageId=".$subStageId;
-
 		$router = $request->getRouter();
-		$dispatcher = $request->getDispatcher();
+		$contextPath = $router->getRequestedContextPath($request, 1);
+
+		$apiUrl = $request->getIndexUrl()."/".$contextPath.'/$$$call$$$/api/file/file-api/download-file?submissionFileId='.$fileId."&submissionId=".$submissionId."&stageId=".$subStageId;
+
 		$templateMgr = TemplateManager::getManager($request);
 		$templateMgr->assign(array(
 			'apiUrl' => $apiUrl,
@@ -188,15 +132,10 @@ error_log("###iiifviewer indexurl[".print_r($request->getIndexUrl(), true)."]\n"
 			'fileId' => $fileId,
 		));
 
-		$templateMgr->display($this->getTemplateResource('display_manifest.tpl'));
-		//$templateMgr->display($this->getTemplateResource('display_manifest_test.tpl'));
+		$templateMgr->display($this->getTemplateResource($theTemplate));
 
-
-//error_log("iiifviewer::viewCallback called [".$hookName."] mimetype [".$submissionFile->getData('mimetype')."] path[".$this->getPluginPath()."] showing template display.tpl for filePublication[".print_r($filePublication)."] filepath[".$imgpath."] returning TRUE\n");
-	
-		return false;
+		return true;
 	}
-
 
 	/**
 	 * Callback for download function
@@ -209,7 +148,6 @@ error_log("###iiifviewer indexurl[".print_r($request->getIndexUrl(), true)."]\n"
 		$publicationFormat =& $params[2];
 		$submissionFile =& $params[3];
 		$inline =& $params[4];
-error_log("iiifviewer::downloadCallback called hookname [".$hookname."] path[".$this->getPluginPath()."]\n");
 
 		$request = Application::get()->getRequest();
 		$mimetype = $submissionFile->getData('mimetype');
