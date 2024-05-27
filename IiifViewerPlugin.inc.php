@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file plugins/generic/pdfJsViewer/IiifViewerPlugin.inc.php
+ * @file plugins/generic/iiifViewer/IiifViewerPlugin.inc.php
  *
  * Copyright (c) 2014-2021 Simon Fraser University
  * Copyright (c) 2003-2021 John Willinsky
@@ -74,7 +74,6 @@ class IiifViewerPlugin extends GenericPlugin {
 		$contextid = $this->getCurrentContextId();
 
 		if ($format == 'iiif_manifest' && (($mime_type == 'application/json') || ($mime_type == 'text/plain'))) {
-			#$this->viewManifestFile($publicationFormat, $mime_type, $submission, $submissionFile, "display_manifest.tpl" );
 			$this->viewImageFile($publicationFormat, $mime_type, $submission, $submissionFile, "display_manifest.tpl" );
 			return true;
 
@@ -112,14 +111,17 @@ class IiifViewerPlugin extends GenericPlugin {
 		$fileStage = $submissionFile->getFileStage();
 		$subStageId = $submission->getStageId();
 		$submissionId = $submission->getId();
+		$format = $publicationFormat->getBestId();
 
-error_log("iiifviewer::viewImageFile called submissionid[".$submissionId."] fileid[".$fileId."] sub stage [".$subStageId."] filestage[".$fileStage."] mimetype [".$submissionFile->getData('mimetype')."] path[".$this->getPluginPath()."]\n");
+error_log("iiifviewer::viewImageFile called submissionid[".$submissionId."] fileid[".$fileId."] sub stage [".$subStageId."] filestage[".$fileStage."] mimetype [".$submissionFile->getData('mimetype')."] path[".$this->getPluginPath()."] format[".$format."]\n");
 
 		$request = Application::get()->getRequest();
 		$router = $request->getRouter();
 		$contextPath = $router->getRequestedContextPath($request, 1);
 
-		$apiUrl = $request->getIndexUrl()."/".$contextPath.'/$$$call$$$/api/file/file-api/download-file?submissionFileId='.$fileId."&submissionId=".$submissionId."&stageId=".$subStageId;
+		//$apiUrl = $request->getIndexUrl()."/".$contextPath.'/$$$call$$$/api/file/file-api/download-file?submissionFileId='.$fileId."&submissionId=".$submissionId."&stageId=".$subStageId;
+
+		$apiUrl = $request->getIndexUrl().'/'.$contextPath.'/catalog/download/'.$submissionId.'/'.$format.'/'.$fileId.'?inline=1';
 
 		$templateMgr = TemplateManager::getManager($request);
 		$templateMgr->assign(array(
@@ -135,31 +137,6 @@ error_log("iiifviewer::viewImageFile called submissionid[".$submissionId."] file
 		$templateMgr->display($this->getTemplateResource($theTemplate));
 
 		return true;
-	}
-
-	/**
-	 * Callback for download function
-	 * @param $hookName string
-	 * @param $params array
-	 * @return boolean
-	 */
-	function downloadCallback($hookName, $params) {
-		$submission =& $params[1];
-		$publicationFormat =& $params[2];
-		$submissionFile =& $params[3];
-		$inline =& $params[4];
-
-		$request = Application::get()->getRequest();
-		$mimetype = $submissionFile->getData('mimetype');
-		if ($mimetype == 'application/pdf' && $request->getUserVar('inline')) {
-			// Turn on the inline flag to ensure that the content
-			// disposition header doesn't foil the PDF embedding
-			// plugin.
-			$inline = true;
-		}
-
-		// Return to regular handling
-		return false;
 	}
 
 	/**

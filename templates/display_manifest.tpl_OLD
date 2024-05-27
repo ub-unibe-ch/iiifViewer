@@ -22,21 +22,23 @@
 {error_log("display_manifest.tpl url[$apiUrl] sub url[$submissionUrl]")}
 
 	<script type="text/javascript">
-	  var mirador = Mirador.viewer({
-	    "id": "my-mirador",
-	    "manifests": {
+	var mirador = Mirador.viewer({
+	  "id": "my-mirador",
+	  "manifests": {
 		"{$apiUrl}" :{
-		  //"provider": "Basel University"
-	      }
-	    },
-	    "windows": [
-	      {
-	        "loadedManifest": "{$apiUrl}",
-	        "canvasIndex": 2,
-	        "thumbnailNavigationPosition": 'far-bottom'
-	      }
-	    ]
-	  });
+	    //"http://localhost/emono/index.php/emono/$$$call$$$/api/file/file-api/download-file?submissionFileId={$fileId}&submissionId={$subId}&stageId={$subStageId}": {
+	      "provider": "Basel University"
+	    }
+	  },
+	  "windows": [
+	    {
+	      "loadedManifest": "{$apiUrl}",
+	      //"loadedManifest": "http://localhost/emono/index.php/emono/$$$call$$$/api/file/file-api/download-file?submissionFileId={$fileId}&submissionId={$subId}&stageId={$subStageId}",
+	      "canvasIndex": 2,
+	      "thumbnailNavigationPosition": 'far-bottom'
+	    }
+	  ]
+	});
 	</script>
 
 </div>
