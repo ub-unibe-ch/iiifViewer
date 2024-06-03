@@ -73,12 +73,16 @@ class IiifViewerPlugin extends GenericPlugin {
 
 		$contextid = $this->getCurrentContextId();
 
+<<<<<<< HEAD
 		if ($mime_type == 'application/json') {
 error_log("iiifviewer::viewCallback called with JSON mime type format[".$format."] format id[".$publicationFormat->getId()."]\n");
 			$this->viewImageFile($publicationFormat, $mime_type, $submission, $submissionFile, "display_manifest.tpl" );
 			return true;
 
 		} elseif ($format == 'iiif_manifest' && (($mime_type == 'application/json') || ($mime_type == 'text/plain'))) {
+=======
+		if ($format == 'iiif_manifest' && (($mime_type == 'application/json') || ($mime_type == 'text/plain'))) {
+>>>>>>> e947fd39efd7a71e0ba5ec2b1a1dbd63b09fafad
 			$this->viewImageFile($publicationFormat, $mime_type, $submission, $submissionFile, "display_manifest.tpl" );
 			return true;
 
