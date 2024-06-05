@@ -153,5 +153,3 @@ error_log("iiifviewer::viewImageFile called submissionid[".$submissionId."] file
                 return $request->getBaseUrl() . '/' . $this->getPluginPath();
         }
 }
-
-<?php
