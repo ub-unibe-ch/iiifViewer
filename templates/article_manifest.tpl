@@ -1,5 +1,5 @@
 {**
- * plugins/generic/iiifViewer/templates/display_manifest.tpl
+ * plugins/generic/iiifViewer/templates/display.tpl
  *
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
