@@ -1,0 +1,25 @@
+{
+  "name": "ub-unibe-ch/pkp-plugin-iiif-viewer",
+  "type": "pkp-plugin",
+  "extra": {
+    "pkp-plugin-name": "iiifViewer"
+  },
+  "require": {
+    "ub-unibe-ch/pkp-installer": "*",
+    "pkp/app-implementation": "*"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://ub-unibe-ch.github.io/ubPackagist"
+    }
+  ],
+  "config": {
+    "allow-plugins": {
+      "ub-unibe-ch/pkp-installer": true
+    }
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.22"
+  }
+}
