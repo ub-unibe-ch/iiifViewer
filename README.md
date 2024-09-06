@@ -26,6 +26,6 @@ iiif manifests trigger Mirador
 ## Feature requests, Bugs
 https://github.com/ub-unibe-ch/iiifViewer/issues
 
-## Developoer
+## Developer
 https://github.com/pjwest
 
