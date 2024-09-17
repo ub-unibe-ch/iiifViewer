@@ -11,7 +11,7 @@ Tested with OJS 3_4_0-4 and OMP 3_4_0-1
 Clone a stable branch into plugins --> generic directory or download a released tar file and place the directory there.
 
 ## Usage
-Store .png, .jpg or iiif manifests in .json as fulltext galleys 
+Store .png, .jpg or iiif manifests in .json as fulltext galleys or images
 <br><br>
 ![Alt-Text](/rm_pics/galleys.png)
 <br><br>
