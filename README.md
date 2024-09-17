@@ -17,11 +17,11 @@ Store .png, .jpg or iiif manifests in .json as fulltext galleys or images
 <br><br>
 .jpg and .png trigger SeaDragon. 
 <br><br>
-![Alt-Text](/rm_pics/seadragon.png) 
+![pic rousseau](/rm_pics/seadragon.png) 
 <br><br>
-iiif manifests trigger Mirador
+iiif manifests trigger Mirador [iiif example file](/ex_iiif_manifest.json)
 <br><br>
-![Alt-Text](/rm_pics/mirador.png)
+![iiif manifest pic v. gogh](/rm_pics/mirador.png)
 
 ## Feature requests, Bugs
 https://github.com/ub-unibe-ch/iiifViewer/issues
