@@ -44,13 +44,21 @@ class IiifViewerPlugin extends \PKP\plugins\GenericPlugin {
 			if ($this->getEnabled($mainContextId)) {
 		    	$request = Application::get()->getRequest();
 			   	$url = $request->getBaseUrl() . '/' . $this->getPluginPath() . '/styles/iiifviewer.css';
-			    $templateMgr = TemplateManager::getManager($request);
+
+                $templateMgr = TemplateManager::getManager($request);
 		    	$templateMgr->addStyleSheet('iiifViewerStyles', $url);
-                if (str_starts_with($context, 'ojs')) {
-				    Hook::add('ArticleHandler::view::galley', [$this, 'articleCallback']);
-				    Hook::add('IssueHandler::view::galley', [$this, 'issueCallback']);
-                } elseif (str_starts_with($context, 'omp')) {
-			    	Hook::add('CatalogBookHandler::view', [$this, 'ompViewCallback'], HOOK::SEQUENCE_NORMAL);
+
+                switch (Application::getName()) {
+                    case 'ojs2':
+                        Hook::add('ArticleHandler::view::galley', [$this, 'articleCallback']);
+                        Hook::add('IssueHandler::view::galley', [$this, 'issueCallback']);
+                        break;
+                    case 'omp':
+			    	    Hook::add('CatalogBookHandler::view', [$this, 'ompViewCallback'], HOOK::SEQUENCE_NORMAL);
+                        break;
+                    case 'ops':
+                        break;
+                    default: throw new \Exception('Unsupported application!');
                 }
 			}
 			return true;
@@ -149,19 +157,21 @@ class IiifViewerPlugin extends \PKP\plugins\GenericPlugin {
 			$bestId = $submission->getBestId();
 			$galleyBestId = $galley->getBestGalleyId();
 			$galleyFile = $galley->getFile();
-            $apiUrl = null;
+            $apiParams['inline'] = 'true';
+            $apiPath = [];
             if ($isLatestPublication) {
-		        $apiUrl = $request->getIndexUrl().'/'.$contextPath.'/article/download/'.$bestId.'/'.$galleyBestId.'/'.$galleyFile->getId().'?inline=1';
+                $apiPath = [$bestId, $galleyBestId, $galleyFile->getId()];
             } else {
-		        $apiUrl = $request->getIndexUrl().'/'.$contextPath.'/article/download/'.$bestId.'/version/'.$galleyPublication->getId().'/'.$galleyBestId.'/'.$galleyFile->getId().'?inline=1';
+                $apiPath = [$bestId, 'version', $galleyPublication->getId(), $galleyBestId, $galleyFile->getId()];
             }
+
+            $apiUrl = $request->url( null, 'article', 'download', $apiPath, $apiParams );
 
 		    $templateMgr = TemplateManager::getManager($request);
 			$templateMgr->assign([
 			    'apiUrl' => $apiUrl,
 			    'pluginUrl' => $request->getBaseUrl() . '/' . $this->getPluginPath(),
 			    'isLatestPublication' => $isLatestPublication,
-
 			]);
 
 			$templateMgr->display($this->getTemplateResource($galleyTemplate));
@@ -200,7 +210,9 @@ class IiifViewerPlugin extends \PKP\plugins\GenericPlugin {
 			$galleyBestId = $galley->getBestGalleyId();
 			$galleyFile = $galley->getFile();
 
-		    $apiUrl = $request->getIndexUrl().'/'.$contextPath.'/issue/download/'.$issueBestId.'/'.$galleyBestId.'/'.$galleyFile->getId().'?inline=1';
+            $apiPath = [$issueBestId, $galleyBestId, $galleyFile->getId()];
+            $apiParams['inline'] = 'true';
+            $apiUrl = $request->url(null, 'issue', 'download', $apiPath, $apiParams );
 
 		    $templateMgr = TemplateManager::getManager($request);
 			$templateMgr->assign([
@@ -246,7 +258,9 @@ class IiifViewerPlugin extends \PKP\plugins\GenericPlugin {
 		$router = $request->getRouter();
 		$contextPath = $router->getRequestedContextPath($request, 1);
 
-		$apiUrl = $request->getIndexUrl().'/'.$contextPath.'/catalog/download/'.$submissionId.'/'.$format.'/'.$fileId.'?inline=1';
+        $apiPath = [$submissionId, $format, $fileId];
+        $apiParams['inline'] = 'true';
+        $apiUrl = $request->url(null, 'catalog', 'download', $apiPath, $apiParams );
 
 		$templateMgr = TemplateManager::getManager($request);
 		$templateMgr->assign(array(

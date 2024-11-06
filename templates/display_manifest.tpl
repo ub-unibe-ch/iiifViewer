@@ -22,13 +22,13 @@
 	  var mirador = Mirador.viewer({
 	    "id": "my-mirador",
 	    "manifests": {
-		"{$apiUrl}" :{
+		{$apiUrl|json_encode:JSON_UNESCAPED_SLASHES} :{
 		  //"provider": "Basel University"
 	      }
 	    },
 	    "windows": [
 	      {
-	        "loadedManifest": "{$apiUrl}",
+	        "loadedManifest": {$apiUrl|json_encode:JSON_UNESCAPED_SLASHES},
 	        "canvasIndex": 2,
 	        "thumbnailNavigationPosition": 'far-bottom'
 	      }
