@@ -29,7 +29,7 @@
     		sequenceMode:       true,
     		tileSources:   [{
 			"type": "image",
-			"url": "{$apiUrl}"
+			"url": {$apiUrl|json_encode:JSON_UNESCAPED_SLASHES}
 		}]
 	    });
 	</script>
