@@ -12,11 +12,6 @@ describe('IIIF Viewer tests', function () {
 			type: "image/png",
 		},
 		{
-			name: "seadragon.png",
-			path: 'plugins/generic/iiifViewer/cypress/tests/data/seadragon.png',
-			type: "image/png",
-		},
-		{
 			name: "mongolica.json",
 			path: 'plugins/generic/iiifViewer/cypress/tests/data/mongolica.json',
 			type: "text/json",
@@ -24,7 +19,6 @@ describe('IIIF Viewer tests', function () {
 	];
 
 	var submission = {
-		section: 'Articles',
 		sectionId: 1,
 		title: title,
 		abstract: 'Test Submission to check if IIIF Viewers are working.',
@@ -47,13 +41,6 @@ describe('IIIF Viewer tests', function () {
 		licenceUrl: 'https://creativecommons.org/licenses/by/4.0/',
 		publishIssueSections: [
 			'Articles'
-		],
-		galleys: [
-			{
-				label: 'PDF',
-				genre: 'Article Text',
-				mimeType: 'application/pdf',
-			}
 		],
 	};
 
