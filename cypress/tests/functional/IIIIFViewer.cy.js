@@ -3,10 +3,14 @@
  */
 describe('IIIF Viewer tests', function () {
 	var title = "IIIF Viewer Test Submission TEST";
-	var issueTitle = 'Vol. 1 No. 2 (2014)';
 
 	//Files for test galleys
 	var Files = [
+		{
+			name: "seadragon.png",
+			path: 'plugins/generic/iiifViewer/cypress/tests/data/seadragon.png',
+			type: "image/png",
+		},
 		{
 			name: "seadragon.png",
 			path: 'plugins/generic/iiifViewer/cypress/tests/data/seadragon.png',
@@ -27,6 +31,7 @@ describe('IIIF Viewer tests', function () {
 		subtitle: '',
 		authors: ["IIIF Viewer Test Author"],
 		submitterRole: 'Journal manager',
+		chapters: [{title: "test chapter", contributors: []}],
 		files: [
 			{
 				'file': 'dummy.pdf',
@@ -82,7 +87,7 @@ describe('IIIF Viewer tests', function () {
 
 	};
 
-	it('Create a submission', function () {
+	it('Create And Validate IIIF Files', function () {
 
 		// Login as admin
 		cy.login('admin', 'admin');
@@ -103,110 +108,98 @@ describe('IIIF Viewer tests', function () {
 				cy.visit('/index.php/publicknowledge/workflow/index/' + submission.id + '/1');
 			});
 
-		//Add galleys
-		for (var i = 0; i < Files.length; i++) {
-			let file = Files[i];
-			cy.get('button#publication-button').click();
-			cy.get('button#galleys-button').click();
-			cy.get('a[id^="component-grid-articlegalleys-articlegalleygrid-addGalley-button-"]').click();
-			cy.wait(400);
-
-			cy.get('input[id^=label-]').type(file.name, {delay: 0});
-			cy.get('form#articleGalleyForm button:contains("Save")').click();
-			cy.get('#genreId').select('Article Text');
-			cy.wait(250);
-
-			cy.readFile(file.path, null)
-				.then((fileContent) => {
-					// Ensure fileContent is a correct string (JSON should already be valid)
-					var testFixture = Cypress.Buffer.from(fileContent);
-
-					// Upload the file using selectFile
-					cy.get('div[id^="fileUploadWizard"] input[type=file]')
-						.selectFile({
-							contents: testFixture, // JSON content
-							fileName: file.name, // Correct file name
-						}, {force: true}); // Force for hidden file inputs
-				});
-
-
-			cy.get('button').contains('Continue').click();
-			cy.get('button').contains('Continue').click();
-			cy.get('button').contains('Complete').click();
-			// cy.get('a').contains('Preview').click();
-			// cy.get('a').contains('JSON').click();
-		}
-		;
 
 		cy.get('button#workflow-button').click();
 		cy.get('a').contains('Accept and Skip Review').click();
 		cy.get('button').contains('Record Decision').click();
 		cy.get('a').contains('View Submission').click();
-		cy.get('a').contains('Preview').click();
 
-	});
+		cy.get('button#publication-button').click();
+		cy.get('button#publicationFormats-button').click();
 
-	it('Check IIIF Viewer enabled in preview', function () {
-		cy.login('admin', 'admin');
-		cy.get('a').contains('admin').click();
-		cy.get('a').contains('Dashboard').click();
 
-		cy.contains('li', title).within(() => {
-			cy.contains('a', 'View').click(); // select our test publication
-		});
+		//Add Publication Formats that contain the files
+		for (var i = 0; i < Files.length; i++) {
+			let file = Files[i];
 
-		cy.get('a').contains('Preview').click();
-		//
-		cy.url().then((currentUrl) => {
-			Files.forEach((file) => {
-				cy.contains('a', file.name).click();
-				cy.wait(2000); //wait until ressource is loaded
+			cy.get('a[id^="component-grid-catalogentry-publicationformatgrid-addFormat-button-"]').click();
+			cy.wait(400);
+			cy.get('input[id^=name-en-]').type(file.name, {delay: 0});
+			cy.get('button:contains("OK")').click();
 
-				if(file.name.endsWith('.json')){
-					assertMiradorIsLoaded();
-				} else {
-					assertOpenSeadragonLoaded();
-				}
-				cy.visit(currentUrl);
+			cy.wait(250);
+
+			cy.get('tbody a').filter(':contains("Change File")').last().click();
+
+			cy.get('#genreId').select("Figure");
+
+			cy.readFile(file.path, null).then((fileContent) => {
+				let testFixture = Cypress.Buffer.from(fileContent);
+				cy.get('div[id^="fileUploadWizard"] input[type=file]')
+					.selectFile({
+							contents: testFixture,
+							fileName: file.name,
+						},
+						{force: true} // needed if the input is hidden
+					);
 			});
+
+			cy.contains('button', 'Continue').click();
+			cy.contains('button', 'Continue').click();
+			cy.contains('button', 'Complete').click();
+		}
+		;
+
+		cy.get('a:contains("Not Available")').then(($links) => {
+			for (let i = 0; i < $links.length; i++) {
+				cy.contains('a', 'Not Available').first().click();
+				cy.contains('button', 'OK').click();
+			}
 		});
-	});
-
-
-	it('Check IIIF Viewer enabled', function () {
-		cy.login('admin', 'admin');
-		cy.get('a').contains('admin').click();
-		cy.get('a').contains('Dashboard').click();
-
-		cy.contains('li', title).within(() => {
-			cy.contains('a', 'View').click(); // select our test publication
+		cy.get('a:contains("Awaiting Approval")').then(($links) => {
+			for (let i = 0; i < $links.length; i++) {
+				cy.contains('a', 'Awaiting Approval').first().click();
+				cy.contains('button', 'OK').click();
+			}
+		});
+		cy.get('a:contains("Set Terms")').then(($links) => {
+			for (let i = 0; i < $links.length; i++) {
+				cy.contains('a', 'Set Terms').first().click();
+				cy.contains('label', 'Open Access').click();
+				cy.wait(500);
+				cy.get('.pkp_modal_panel').within(() => {
+					cy.contains('label', 'Open Access').click();
+					cy.wait(500);
+					cy.contains('button[name="submitFormButton"]', 'Save').click();
+				});
+			}
 		});
 
-		cy.get('a').contains('Send To Production').click();
-		cy.get('button').contains('Record Decision').click();
-		cy.get('a').contains('View Submission').click();
+		//Add a file to the chapter
+		cy.get('button#chapters-button').click();
+		cy.contains('a', 'test chapter').click();
 
-		cy.get('button').contains('Schedule For Publication').click();
-		cy.get('button').contains('Issue').click();
-		cy.get('button').contains('Assign to Issue').click();
+		cy.contains('.pkp_modal_panel label', Files[0].name).click();
+		cy.contains('.pkp_modal_panel button', 'Save').should('be.visible').click();
 
-		cy.get('div[role="dialog"]').within(() => { //publish
-			cy.get('#assignToIssue-issueId-control').select(issueTitle);
-			cy.get('button[label="Save"]').click();
-			cy.get('button').contains('Publish').click();
 
-			// cy.get('button').contains('Schedule For Publication').click();
+		// Wait for modal to disappear and notifications to flush
+		cy.get('.pkp_modal_panel').should('not.exist');
+		cy.flushNotifications();
 
-		});
+		//publish
+		cy.get('.pkp_modal_panel .editor-class').should('exist');
+		cy.contains('.pkp_modal_panel button', 'Publish').click();
+		cy.get('.pkp_modal_panel button').contains('Publish').click();
+		cy.get('.pkpHeader__actions a').contains('View').click();
 
-		cy.visit(`/index.php/publicknowledge/index`);
-
+		// Check the files are displayed with the IIIF viewer
 		cy.url().then((currentUrl) => {
 			Files.forEach((file) => {
 				cy.contains('a', file.name).click();
 				cy.wait(2000); //wait until ressource is loaded
 
-				if(file.name.endsWith('.json')){
+				if (file.name.endsWith('.json')) {
 					assertMiradorIsLoaded();
 				} else {
 					assertOpenSeadragonLoaded();
