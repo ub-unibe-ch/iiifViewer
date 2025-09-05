@@ -231,9 +231,9 @@ class IiifViewerPlugin extends \PKP\plugins\GenericPlugin {
 
 	/**
 	 * function to prepare IIIFViewer data for an image file.
-	 * @param PublicationFormat $publicationFormat 
-	 * @param Submission $submission 
-	 * @param SubmissionFile $submissionFile 
+	 * @param PublicationFormat $publicationFormat
+	 * @param Submission $submission
+	 * @param SubmissionFile $submissionFile
 	 * @param string $theTemplate
      *
 	 * @return boolean
@@ -263,11 +263,24 @@ class IiifViewerPlugin extends \PKP\plugins\GenericPlugin {
         $apiUrl = $request->url(null, 'catalog', 'download', $apiPath, $apiParams );
 
 		$templateMgr = TemplateManager::getManager($request);
+
+        if (method_exists($submission, 'getLocalizedTitle')) {
+            $monographTitle = $submission->getLocalizedTitle();
+        }
+        else {
+            // OMP 3.4+ (titles stored in data));
+            $monographTitle = $submission->getData('fullTitle');
+        }
+
+
 		$templateMgr->assign(array(
 			'apiUrl' => $apiUrl,
 			'pluginUrl' => $request->getBaseUrl() . '/' . $this->getPluginPath(),
 			'isLatestPublication' => $submission->getData('currentPublicationId') === $publicationFormat->getData('publicationId'),
+            'monographTitle' => $monographTitle,
 		));
+
+
 
 		$templateMgr->display($this->getTemplateResource($theTemplate));
 
