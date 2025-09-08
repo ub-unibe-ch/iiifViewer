@@ -49,6 +49,7 @@ Then run:
 ```
 DROP DATABASE IF EXISTS pkp_test_db;
 CREATE DATABASE pkp_test_db;
+CREATE USER IF NOT EXISTS 'pkp'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON pkp_test_db.* TO 'pkp'@'localhost';
 FLUSH PRIVILEGES;
 exit;
