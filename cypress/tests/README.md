@@ -90,7 +90,7 @@ sendria --db mails.sqlite
 npx cypress run
 ```
 
-They also setup the testdb and create a user admin (with password admin).
+This is needed to setup the test database and create a user admin (with password admin).
 
 ---
 
