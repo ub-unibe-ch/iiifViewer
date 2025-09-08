@@ -98,7 +98,11 @@ This is needed to setup the test database and create a user admin (with password
 ```
 npx cypress run --config "specPattern=**plugins/generic/**/cypress/tests/**/*.cy.{js,ts}"
 ```
+
+Note use `open` instead of `run` to use the interactive GUI.
+
 ---
+
 
 ## References
 - [PKP Plugin Development Guide – Write Tests](https://docs.pkp.sfu.ca/dev/plugin-guide/en/release#write-tests-for-your-plugin)  
