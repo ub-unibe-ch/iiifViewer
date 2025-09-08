@@ -39,6 +39,8 @@ describe('IIIF Viewer tests', function () {
 			pageNumber: '71-98',
 		},
 		urlPath: 'testing-iiif-viewer-submission-' + Cypress._.uniqueId(Date.now().toString()),
+
+
 		licenceUrl: 'https://creativecommons.org/licenses/by/4.0/',
 		publishIssueSections: [
 			'Articles'
