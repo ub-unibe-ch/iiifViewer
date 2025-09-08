@@ -29,6 +29,10 @@ and before each test run with initial setup:
 ```
 installed = Off
 ```
+Or with linux use:
+```
+sed -i 's/installed = On/installed = Off/' config.inc.php
+```
 ---
 
 Create a file named `cypress.env.json` in the root of your project:
