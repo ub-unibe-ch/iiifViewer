@@ -1,0 +1,94 @@
+# Cypress Integration Tests for IIIFPlugin
+
+This guide explains how to set up and run Cypress integration tests for the IIIFPlugin, following the [PKP Plugin Development Guide](https://docs.pkp.sfu.ca/dev/plugin-guide/en/release#write-tests-for-your-plugin) and [PKP Testing Documentation](https://docs.pkp.sfu.ca/dev/testing/en/getting-started#configure-your-environment).
+
+---
+
+## Setup
+
+### Configuration for Testing
+
+Update the following settings in `config.php` (copy of `config.TEMPLATE.inc.php`):
+```
+default = smtp
+smtp = On
+smtp_server = localhost
+smtp_port = 1025
+```
+and before each test run with initial setup:
+```
+installed = Off
+```
+---
+
+Create a file named `cypress.env.json` in the root of your project:
+```
+{
+  "baseUrl": "http://localhost:8000",
+  "DBTYPE": "mysqli",
+  "DBHOST": "localhost",
+  "DBUSERNAME": "pkp",
+  "DBPASSWORD": "password",
+  "DBNAME": "pkp_test_db",
+  "FILESDIR": "files"
+}
+```
+> Ensure the `FILESDIR` exists:
+```
+mkdir files
+```
+---
+
+### Create or Recreate the Test Database
+
+Open MySQL as root:
+```
+sudo mysql -u root -p
+```
+Then run:
+```
+DROP DATABASE IF EXISTS pkp_test_db;
+CREATE DATABASE pkp_test_db;
+GRANT ALL PRIVILEGES ON pkp_test_db.* TO 'pkp'@'localhost';
+FLUSH PRIVILEGES;
+exit;
+```
+---
+
+##  Run Tests  
+
+### Start the Server
+```
+php -S localhost:8000
+```
+
+#### (Only for 3.5 versions)
+install and run sendria:
+
+```
+python3 -m pip install sendria
+sendria --db mails.sqlite
+```
+
+---
+
+###  Run Tests 
+
+#### Initial tests:
+```
+npx cypress run
+```
+
+They also setup the testdb and create a user admin (with password admin).
+
+---
+
+####  Run Plugin Tests
+```
+npx cypress run --config "specPattern=**plugins/generic/**/cypress/tests/**/*.cy.{js,ts}"
+```
+---
+
+## References
+- [PKP Plugin Development Guide – Write Tests](https://docs.pkp.sfu.ca/dev/plugin-guide/en/release#write-tests-for-your-plugin)  
+- [PKP Testing Documentation – Configure Your Environment](https://docs.pkp.sfu.ca/dev/testing/en/getting-started#configure-your-environment)
