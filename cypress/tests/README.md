@@ -2,9 +2,19 @@
 
 This guide explains how to set up and run Cypress integration tests for the IIIFPlugin, following the [PKP Plugin Development Guide](https://docs.pkp.sfu.ca/dev/plugin-guide/en/release#write-tests-for-your-plugin) and [PKP Testing Documentation](https://docs.pkp.sfu.ca/dev/testing/en/getting-started#configure-your-environment).
 
----
 
-## Setup
+## Prerequisites
+
+1. **Get OJS or OMP**  
+   - Clone the repository for [OJS](https://github.com/pkp/ojs) or [OMP](https://github.com/pkp/omp).  
+   - Select either the **3.4** or **3.5** stable branch.  
+     See the PKP documentation: [Getting Started](https://docs.pkp.sfu.ca/dev/documentation/en/getting-started).
+
+2. **Set up the Plugin**  
+   - Clone this repository into the `plugins/generic/` folder of your OJS/OMP installation.  
+   - Switch to the respective **testing branch**.
+
+## Test Setup
 
 ### Configuration for Testing
 
