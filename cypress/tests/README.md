@@ -8,7 +8,7 @@ This guide explains how to set up and run Cypress integration tests for the IIIF
 
 ### Configuration for Testing
 
-Update the following settings in `config.php` (copy of `config.TEMPLATE.inc.php`):
+Update the following settings in `config.inc.php` (copy of `config.TEMPLATE.inc.php`):
 ```
 default = smtp
 smtp = On
