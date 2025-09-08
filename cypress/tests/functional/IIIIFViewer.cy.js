@@ -1,23 +1,12 @@
 /**
  * Integration tests for the IIIF Viewer plugin.
  */
+
+import { Files } from '../files.js';
+
 describe('IIIF Viewer tests', function () {
 	var title = "IIIF Viewer Test Submission TEST";
 	var issueTitle = 'Vol. 1 No. 2 (2014)';
-
-	//Files for test galleys
-	var Files = [
-		{
-			name: "seadragon.png",
-			path: 'plugins/generic/iiifViewer/cypress/tests/data/seadragon.png',
-			type: "image/png",
-		},
-		{
-			name: "mongolica.json",
-			path: 'plugins/generic/iiifViewer/cypress/tests/data/mongolica.json',
-			type: "text/json",
-		},
-	];
 
 	var submission = {
 		section: 'Articles',
@@ -39,7 +28,6 @@ describe('IIIF Viewer tests', function () {
 			pageNumber: '71-98',
 		},
 		urlPath: 'testing-iiif-viewer-submission-' + Cypress._.uniqueId(Date.now().toString()),
-
 
 		licenceUrl: 'https://creativecommons.org/licenses/by/4.0/',
 		publishIssueSections: [
