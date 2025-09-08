@@ -1,22 +1,14 @@
 /**
  * Integration tests for the IIIF Viewer plugin.
  */
+
+
+import { Files } from '../files.js';
+
 describe('IIIF Viewer tests', function() {
 	var title = 'IIIF Viewer Test Submission TEST';
 
 	//Files for test galleys
-	var Files = [
-		{
-			name: 'seadragon.png',
-			path: 'plugins/generic/iiifViewer/cypress/tests/data/seadragon.png',
-			type: 'image/png'
-		},
-		{
-			name: 'mongolica.json',
-			path: 'plugins/generic/iiifViewer/cypress/tests/data/mongolica.json',
-			type: 'text/json'
-		}
-	];
 
 	var submission = {
 		sectionId: 1,
@@ -127,21 +119,21 @@ describe('IIIF Viewer tests', function() {
 
 
 				//set public and open access
-				cy.get('a:contains("Not Available")').then(($links) => {
+				cy.contains('.pkp_linkActions > a' ,'Not Available').then(($links) => {
 					for (let i = 0; i < $links.length; i++) {
 						cy.contains('a', 'Not Available').first().click();
 						cy.contains('button', 'OK').click({force: true});
 					}
 				});
 
-				cy.get('a:contains("Awaiting Approval")').then(($links) => {
+				cy.contains('.pkp_linkActions > a' ,'Awaiting Approval').then(($links) => {
 					for (let i = 0; i < $links.length; i++) {
 						cy.contains('a', 'Awaiting Approval').first().click();
-						cy.contains('button', 'OK').click({force: true});
+						cy.contains('button', 'OK').click();
 					}
 				});
 
-				cy.get('a:contains("Set Terms")').then(($links) => {
+				cy.contains('.pkp_linkActions > a' ,"Set Terms").then(($links) => {
 					for (let i = 0; i < $links.length; i++) {
 						cy.contains('a', 'Set Terms').first().click();
 						cy.get('.checkbox_and_radiobutton > :nth-child(1) > label').click();
@@ -165,7 +157,7 @@ describe('IIIF Viewer tests', function() {
 			cy.openWorkflowMenu('Chapters');
 			cy.waitJQuery();
 
-			cy.get('.flex-none > .flex > :nth-child(1)').click(); // click view butotn
+			cy.get('.flex-none > .flex > :nth-child(1)').click(); // click view
 
 			// Check the files are displayed with the IIIF viewer
 			cy.url().then((currentUrl) => {
@@ -181,7 +173,6 @@ describe('IIIF Viewer tests', function() {
 					cy.visit(currentUrl);
 				});
 			});
-
 
 		}
 	)
