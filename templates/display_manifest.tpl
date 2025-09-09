@@ -6,14 +6,9 @@
  * Embedded viewing of an IIIF image file.
  *}
 
-
-
 {include file="frontend/components/header.tpl" pageTitle="viewer.mirador.iiif"}
-{include file="frontend/components/breadcrumbs.tpl" currentTitleKey="navigation.iiifviewer"}
-
 
 <div class="page page_viewer">
-
 
 	<!-- By default uses Roboto font. Be sure to load this or change the font -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
