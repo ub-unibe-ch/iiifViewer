@@ -3,7 +3,7 @@
  */
 
 
-import { Files } from '../files.js';
+import {Files} from '../files.js';
 
 describe('IIIF Viewer tests', function() {
 	var title = 'IIIF Viewer Test Submission TEST';
@@ -61,119 +61,139 @@ describe('IIIF Viewer tests', function() {
 		});
 
 	};
-//
+
+
+	it('Enable The Plugin', function() {
+		cy.login('admin', 'admin', 'publicknowledge');
+
+		cy.get('nav').contains('Settings').click();
+		// Ensure submenu item click despite animation
+		cy.get('nav').contains('Website').click({force: true});
+		cy.get('button[id="plugins-button"]').click();
+
+		cy.get('input[id^="select-cell-iiifviewerplugin-enabled"]').then(($checkbox) => {
+			if (!$checkbox.prop('checked')) {
+				cy.wrap($checkbox).click();
+				cy.get('input[id^="select-cell-iiifviewerplugin-enabled"]').should('be.checked');
+			} else {
+				cy.wrap($checkbox).should('be.checked');
+			}
+		});
+
+	});
+
 	it('Create And Validate IIIF Files', function() {
-			// Login as admin
-			cy.login('admin', 'admin');
-			cy.get('a').contains('admin').click();
-			cy.get('a').contains('Dashboard').click();
+		// Login as admin
+		cy.login('admin', 'admin');
+		cy.get('a').contains('admin').click();
+		cy.get('a').contains('Dashboard').click();
 
 
-// Create a new submission
-			cy.getCsrfToken();
-			cy.window()
-				.then(() => {
-					return cy.createSubmissionWithApi(submission, this.csrfToken);
-				})
-				.then(xhr => {
-					return cy.submitSubmissionWithApi(submission.id, this.csrfToken);
-				})
-				.then(xhr => {
-					cy.visit('/index.php/publicknowledge/workflow/index/' + submission.id + '/1');
-				});
-
-			cy.openWorkflowMenu('Submission');
-			cy.get('button').contains('Accept and Skip Review').click();
-			cy.get('button').contains('Record Decision').click();
-			cy.get('a').contains('View Submission Summary').click();
-
-			cy.openWorkflowMenu('Publication Formats');
-
-
-			//Add Publication Formats that contain the files
-			for (var i = 0; i < Files.length; i++) {
-				let file = Files[i];
-
-				cy.contains('a', 'Add publication format').click();
-				cy.wait(400);
-				cy.get('input[id^=name-en-]').type(file.name, {delay: 0});
-				cy.get('button:contains("OK")').click();
-				cy.wait(250);
-				cy.get('tbody a').filter(':contains("Change File")').last().click();
-				cy.get('#genreId').select('Figure');
-
-				cy.readFile(file.path, null).then((fileContent) => {
-					let testFixture = Cypress.Buffer.from(fileContent);
-					cy.get('div[id^="fileUploadWizard"] input[type=file]')
-						.selectFile({
-								contents: testFixture,
-								fileName: file.name
-							},
-							{force: true} // needed if the input is hidden
-						);
-				});
-
-				cy.get('button').contains('Continue').click();
-				cy.get('button').contains('Continue').click();
-				cy.get('#continueButton').click();
-
-
-				//set public and open access
-				cy.contains('.pkp_linkActions > a' ,'Not Available').then(($links) => {
-					for (let i = 0; i < $links.length; i++) {
-						cy.contains('a', 'Not Available').first().click();
-						cy.contains('button', 'OK').click({force: true});
-					}
-				});
-
-				cy.contains('.pkp_linkActions > a' ,'Awaiting Approval').then(($links) => {
-					for (let i = 0; i < $links.length; i++) {
-						cy.contains('a', 'Awaiting Approval').first().click();
-						cy.contains('button', 'OK').click();
-					}
-				});
-
-				cy.contains('.pkp_linkActions > a' ,"Set Terms").then(($links) => {
-					for (let i = 0; i < $links.length; i++) {
-						cy.contains('a', 'Set Terms').first().click();
-						cy.get('.checkbox_and_radiobutton > :nth-child(1) > label').click();
-						cy.wait(500);
-						cy.contains('button[name="submitFormButton"]', 'Save').click();
-					}
-				});
-			};
-
-
-			cy.openWorkflowMenu('Chapters');
-			cy.get('a').contains('test chapter').click();
-			cy.get('li label').contains(Files[0].name).click();
-			cy.contains('button[name="submitFormButton"]', 'Save').click();
-			cy.contains('button', 'Publish').click();
-			cy.waitJQuery();
-
-			cy.get('.buttonRow > .pkpButton').click();
-			cy.waitJQuery();
-
-			cy.openWorkflowMenu('Chapters');
-			cy.waitJQuery();
-
-			cy.get('.flex-none > .flex > :nth-child(1)').click(); // click view
-
-			// Check the files are displayed with the IIIF viewer
-			cy.url().then((currentUrl) => {
-				Files.forEach((file) => {
-					cy.contains('a', file.name).click();
-					cy.wait(2000); //wait until ressource is loaded
-
-					if (file.name.endsWith('.json')) {
-						assertMiradorIsLoaded();
-					} else {
-						assertOpenSeadragonLoaded();
-					}
-					cy.visit(currentUrl);
-				});
+		// Create a new submission
+		cy.getCsrfToken();
+		cy.window()
+			.then(() => {
+				return cy.createSubmissionWithApi(submission, this.csrfToken);
+			})
+			.then(xhr => {
+				return cy.submitSubmissionWithApi(submission.id, this.csrfToken);
+			})
+			.then(xhr => {
+				cy.visit('/index.php/publicknowledge/workflow/index/' + submission.id + '/1');
 			});
 
+		cy.openWorkflowMenu('Submission');
+		cy.get('button').contains('Accept and Skip Review').click();
+		cy.get('button').contains('Record Decision').click();
+		cy.get('a').contains('View Submission Summary').click();
+
+		cy.openWorkflowMenu('Publication Formats');
+
+
+		//Add Publication Formats that contain the files
+		for (var i = 0; i < Files.length; i++) {
+			let file = Files[i];
+
+			cy.contains('a', 'Add publication format').click();
+			cy.wait(400);
+			cy.get('input[id^=name-en-]').type(file.name, {delay: 0});
+			cy.get('button:contains("OK")').click();
+			cy.wait(250);
+			cy.get('tbody a').filter(':contains("Change File")').last().click();
+			cy.get('#genreId').select('Figure');
+
+			cy.readFile(file.path, null).then((fileContent) => {
+				let testFixture = Cypress.Buffer.from(fileContent);
+				cy.get('div[id^="fileUploadWizard"] input[type=file]')
+					.selectFile({
+							contents: testFixture,
+							fileName: file.name
+						},
+						{force: true} // needed if the input is hidden
+					);
+			});
+
+			cy.get('button').contains('Continue').click();
+			cy.get('button').contains('Continue').click();
+			cy.get('#continueButton').click();
+
+
+			//set public and open access
+			cy.contains('.pkp_linkActions > a', 'Not Available').then(($links) => {
+				for (let i = 0; i < $links.length; i++) {
+					cy.contains('a', 'Not Available').first().click();
+					cy.contains('button', 'OK').click({force: true});
+				}
+			});
+
+			cy.contains('.pkp_linkActions > a', 'Awaiting Approval').then(($links) => {
+				for (let i = 0; i < $links.length; i++) {
+					cy.contains('a', 'Awaiting Approval').first().click();
+					cy.contains('button', 'OK').click();
+				}
+			});
+
+			cy.contains('.pkp_linkActions > a', 'Set Terms').then(($links) => {
+				for (let i = 0; i < $links.length; i++) {
+					cy.contains('a', 'Set Terms').first().click();
+					cy.get('.checkbox_and_radiobutton > :nth-child(1) > label').click();
+					cy.wait(500);
+					cy.contains('button[name="submitFormButton"]', 'Save').click();
+				}
+			});
 		}
-	);
+		;
+
+
+		cy.openWorkflowMenu('Chapters');
+		cy.get('a').contains('test chapter').click();
+		cy.get('li label').contains(Files[0].name).click();
+		cy.contains('button[name="submitFormButton"]', 'Save').click();
+		cy.contains('button', 'Publish').click();
+		cy.waitJQuery();
+
+		cy.get('.buttonRow > .pkpButton').click();
+		cy.waitJQuery();
+
+		cy.openWorkflowMenu('Chapters');
+		cy.waitJQuery();
+
+		cy.get('.flex-none > .flex > :nth-child(1)').click(); // click view
+
+		// Check the files are displayed with the IIIF viewer
+		cy.url().then((currentUrl) => {
+			Files.forEach((file) => {
+				cy.contains('a', file.name).click();
+				cy.wait(2000); //wait until ressource is loaded
+
+				if (file.name.endsWith('.json')) {
+					assertMiradorIsLoaded();
+				} else {
+					assertOpenSeadragonLoaded();
+				}
+				cy.visit(currentUrl);
+			});
+		});
+
+	});
 });
