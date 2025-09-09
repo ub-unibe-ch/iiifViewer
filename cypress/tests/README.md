@@ -95,6 +95,7 @@ npx cypress run
 ```
 
 This is needed to setup the test database and create a user admin (with password admin).
+If you jsut need the installation use: npx cypress run --config "specPattern=cypress/tests/data/10-ApplicationSetup/*.cy.{js,ts}" (faster)
 
 ---
 
