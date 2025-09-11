@@ -6,11 +6,6 @@ export const Files = [
 	},
 	{
 		name: 'IIIF_example.json',
-		path: 'plugins/generic/iiifViewer/cypress/tests/data/test.json',
-		type: 'text/json'
-	},
-	{
-		name: 'IIIF_example.json',
 		path: 'plugins/generic/iiifViewer/cypress/tests/data/IIIF_example.json',
 		type: 'text/json'
 	},

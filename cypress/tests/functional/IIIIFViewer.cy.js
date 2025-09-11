@@ -72,6 +72,23 @@ describe('IIIF Viewer tests', function () {
 
 	};
 
+	it('Enable The Plugin', function() {
+		cy.login('admin', 'admin', 'publicknowledge');
+
+		cy.get('nav').contains('Settings').click();
+		// Ensure submenu item click despite animation
+		cy.get('nav').contains('Website').click({force: true});
+		cy.get('button[id="plugins-button"]').click();
+
+		cy.get('input[id^="select-cell-iiifviewerplugin-enabled"]').then(($checkbox) => {
+			if (!$checkbox.prop('checked')) {
+				cy.wrap($checkbox).click();
+			}
+		});
+		cy.get('input[id^="select-cell-iiifviewerplugin-enabled"]').should('be.checked');
+	});
+
+
 	it('Create a submission', function () {
 
 		// Login as admin
