@@ -4,7 +4,6 @@
 
 import { Files } from '../files.js';
 
-
 describe('IIIF Viewer tests', function () {
 	var title = "IIIF Viewer Test Submission TEST";
 	var issueTitle = 'Vol. 1 No. 2 (2014)';
@@ -72,7 +71,26 @@ describe('IIIF Viewer tests', function () {
 
 	};
 
-	it('Create a submission and See if IIIF Vieer is enabeld in preview', function () {
+	it('Enable The Plugin', function() {
+		cy.login('admin', 'admin', 'publicknowledge');
+
+		cy.get('nav').contains('Settings').click();
+		// Ensure submenu item click despite animation
+		cy.get('nav').contains('Website').click({force: true});
+		cy.get('button[id="plugins-button"]').click();
+
+		cy.get('input[id^="select-cell-iiifviewerplugin-enabled"]').then(($checkbox) => {
+			if (!$checkbox.prop('checked')) {
+				cy.wrap($checkbox).click();
+			}
+		});
+
+		cy.get('input[id^="select-cell-iiifviewerplugin-enabled"]').should('be.checked');
+
+	});
+
+
+	it('Create a submission and check if IIIF Viewer is enabled in preview', function () {
 
 		// Login as admin
 		cy.login('admin', 'admin');
