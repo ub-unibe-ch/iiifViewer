@@ -25,15 +25,6 @@ smtp = On
 smtp_server = localhost
 smtp_port = 1025
 ```
-and before each test run with initial setup:
-```
-installed = Off
-```
-Or with linux use:
-```
-sed -i 's/installed = On/installed = Off/' config.inc.php
-```
----
 
 Create a file named `cypress.env.json` in the root of your project:
 ```
@@ -47,26 +38,24 @@ Create a file named `cypress.env.json` in the root of your project:
   "FILESDIR": "files"
 }
 ```
-> Ensure the `FILESDIR` exists:
+
+### Before running or re-running all tests 
+- Ensure the `FILESDIR` exists and is empty:
+- installed = Off in `config.inc.php`
+- Create or Recreate the Test Database
+
 ```
 mkdir files
-```
----
+rm -rf files/*
+sed -i 's/installed = On/installed = Off/' config.inc.php
 
-### Create or Recreate the Test Database
-
-Open MySQL as root:
-```
-sudo mysql -u root -p
-```
-Then run:
-```
+sudo mysql -u root -p -e "
 DROP DATABASE IF EXISTS pkp_test_db;
 CREATE DATABASE pkp_test_db;
 CREATE USER IF NOT EXISTS 'pkp'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON pkp_test_db.* TO 'pkp'@'localhost';
 FLUSH PRIVILEGES;
-exit;
+"
 ```
 ---
 
