@@ -14,7 +14,7 @@ jobs:
             php-version: 8.2
             database: mysql
           - application: omp
-            php-version: 8.2
+            php-version: 8.1
             database: pgsql
           - application: omp
             php-version: 8.2
