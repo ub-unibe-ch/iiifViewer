@@ -8,18 +8,24 @@ jobs:
       matrix:
         include:
           - application: ojs
+            php-version: 8.1
+            database: mysql
+          - application: ojs
             php-version: 8.2
             database: mysql
           - application: ojs
-            php-version: 8.3
-            database: mysql
+            php-version: 8.2
+            database: pgsql
+          - application: ojs
+            php-version: 8.2
+            database: pgsql
 
     name: iiifviewer
     steps:
       - uses: pkp/pkp-github-actions@v1
         with:
-          node_version: 12
+          node_version: 16
           branch: stable-3_4_0
           repository: pkp
           plugin: true
-          dataset_inject: false
+          dataset_inject: true
