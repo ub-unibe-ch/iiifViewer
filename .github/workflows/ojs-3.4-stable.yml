@@ -1,7 +1,7 @@
 on: [push, pull_request]
-name: iiifviewer
+name: iiifViewer
 jobs:
-  iiifviewer:
+  iiifViewer:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -20,7 +20,7 @@ jobs:
             php-version: 8.2
             database: pgsql
 
-    name: iiifviewer
+    name: iiifViewer
     steps:
       - uses: pkp/pkp-github-actions@v1
         with:
