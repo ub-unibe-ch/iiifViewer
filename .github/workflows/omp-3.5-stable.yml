@@ -1,5 +1,5 @@
 on: [push, pull_request]
-name: iiifViewer
+name: ${{ github.ref_name }}
 jobs:
   iiifViewer:
     runs-on: ubuntu-latest
