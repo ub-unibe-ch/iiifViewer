@@ -1,0 +1,31 @@
+on: [push, pull_request]
+name: iiifViewer
+jobs:
+  iiifViewer:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - application: omp
+            php-version: 8.1
+            database: mysql
+          - application: omp
+            php-version: 8.2
+            database: mysql
+          - application: omp
+            php-version: 8.2
+            database: pgsql
+          - application: omp
+            php-version: 8.2
+            database: pgsql
+
+    name: iiifViewer
+    steps:
+      - uses: pkp/pkp-github-actions@v1
+        with:
+          node_version: 20
+          branch: stable-3_5_0
+          repository: pkp
+          plugin: true
+          dataset_inject: true
