@@ -1,5 +1,5 @@
 on: [push, pull_request]
-name: ${{ github.ref_name }}
+name: omp-3.5-stable
 jobs:
   iiifViewer:
     runs-on: ubuntu-latest
