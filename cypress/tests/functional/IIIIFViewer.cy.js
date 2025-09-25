@@ -91,7 +91,7 @@ describe('IIIF Viewer tests', function () {
 
 
 	it('Create a submission and check if IIIF Viewer is enabled in preview', function () {
-
+		cy.log('Starting submission test');
 		// Login as admin
 		cy.login('admin', 'admin');
 		cy.get('a').contains('admin').click();
@@ -110,6 +110,8 @@ describe('IIIF Viewer tests', function () {
 			.then(xhr => {
 				cy.visit('/index.php/publicknowledge/workflow/index/' + submission.id + '/1');
 			});
+
+		cy.log('Adding files to submission');
 
 		//Add galleys
 		for (var i = 0; i < Files.length; i++) {
@@ -148,6 +150,8 @@ describe('IIIF Viewer tests', function () {
 		cy.get('a').contains('View Submission').click();
 		cy.get('button').contains('Preview').click();
 		cy.waitJQuery();
+
+		cy.log('Check plugin is working in preview');
 
 		//check plugin is workin in preview
 		cy.url().then((currentUrl) => {
