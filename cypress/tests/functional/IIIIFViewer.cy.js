@@ -151,9 +151,11 @@ describe('IIIF Viewer tests', function () {
             cy.scrollTo('bottom')
 
             cy.contains('a', 'Awaiting Approval').first().click();
+			cy.wait(400);
             cy.contains('button', 'OK').click();
 
             cy.contains('a', 'Not Available').first().click();
+			cy.wait(400);
             cy.contains('button', 'OK').click();
 
             cy.scrollTo('bottom')
