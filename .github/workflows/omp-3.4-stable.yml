@@ -10,15 +10,15 @@ jobs:
           - application: omp
             php-version: 8.1
             database: mysql
-#          - application: omp
-#            php-version: 8.2
-#            database: mysql
-#          - application: omp
-#            php-version: 8.2
-#            database: pgsql
-#          - application: omp
-#            php-version: 8.2
-#            database: pgsql
+          - application: omp
+            php-version: 8.2
+            database: mysql
+          - application: omp
+            php-version: 8.2
+            database: pgsql
+          - application: omp
+            php-version: 8.2
+            database: pgsql
 
     name: iiifViewer
     steps:
