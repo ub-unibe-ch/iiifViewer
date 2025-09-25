@@ -6,7 +6,6 @@ import { Files } from '../files.js';
 
 describe('IIIF Viewer tests', function () {
 	var title = "IIIF Viewer Test Submission TEST";
-	var issueTitle = 'Vol. 1 No. 2 (2014)';
 
 	var submission = {
 		section: 'Articles',
@@ -91,14 +90,13 @@ describe('IIIF Viewer tests', function () {
 
 
 	it('Create a submission and check if IIIF Viewer is enabled in preview', function () {
-
-		cy.log("TEST LOG")
+		console.log("TEST LOG1: creating submission");
 		// Login as admin
 		cy.login('admin', 'admin');
 		cy.get('a').contains('admin').click();
 		cy.get('a').contains('Dashboard').click();
 
-		cy.log("TEST LOG2")
+		console.log("TEST LOG2: creating submission");
 
 		// Create a new submission
 		cy.getCsrfToken();
@@ -113,7 +111,7 @@ describe('IIIF Viewer tests', function () {
 				cy.visit('/index.php/publicknowledge/workflow/index/' + submission.id + '/1');
 			});
 
-		cy.log("TEST LOG3")
+		console.log("TEST LOG3: creating submission");
 
 		//Add galleys
 		for (var i = 0; i < Files.length; i++) {
@@ -140,6 +138,7 @@ describe('IIIF Viewer tests', function () {
 						}, {force: true}); // Force for hidden file inputs
 				});
 
+			console.log("TEST LOG4: creating submission");
 
 			cy.get('button').contains('Continue').click();
 			cy.get('button').contains('Continue').click();
