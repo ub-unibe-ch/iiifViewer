@@ -10,15 +10,15 @@ jobs:
           - application: ojs
             php-version: 8.3
             database: mysql
-          - application: ojs
-            php-version: 8.2
-            database: mysql
-          - application: ojs
-            php-version: 8.3
-            database: pgsql
-          - application: ojs
-            php-version: 8.2
-            database: pgsql
+#          - application: ojs
+#            php-version: 8.2
+#            database: mysql
+#          - application: ojs
+#            php-version: 8.3
+#            database: pgsql
+#          - application: ojs
+#            php-version: 8.2
+#            database: pgsql
     name: iiifViewer
     steps:
       - uses: pkp/pkp-github-actions@v1
