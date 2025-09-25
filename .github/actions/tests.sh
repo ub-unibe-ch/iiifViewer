@@ -1,4 +1,4 @@
 echo "Run cypress tests"
-npx cypress run --headless --disable-gpu --config '{"specPattern":["plugins/generic/iiifViewer/cypress/tests/functional/*.cy.js"]}'
+npx cypress run --headless --config '{"specPattern":["plugins/generic/iiifViewer/cypress/tests/functional/*.cy.js"]}'
 
 echo "Validate  against erudit-style"
