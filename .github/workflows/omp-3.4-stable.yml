@@ -1,5 +1,5 @@
 on: [push, pull_request]
-name: iiifViewer
+name: omg-3.4-stable
 jobs:
   iiifViewer:
     runs-on: ubuntu-latest
