@@ -1,5 +1,5 @@
 on: [push, pull_request]
-name: iiifViewer
+name: ojs-3.5-stable
 jobs:
   iiifViewer:
     runs-on: ubuntu-latest
