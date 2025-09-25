@@ -170,6 +170,7 @@ describe('IIIF Viewer tests', function () {
 				cy.contains('button[name="submitFormButton"]', 'Save').click();
 			});
 
+			cy.reload();
 			cy.scrollTo('bottom')
 
 			cy.contains('a', 'Awaiting Approval').first().click();
