@@ -8,8 +8,6 @@ import {Files} from '../files.js';
 describe('IIIF Viewer tests', function() {
 	var title = 'IIIF Viewer Test Submission TEST';
 
-	//Files for test galleys
-
 	var submission = {
 		sectionId: 1,
 		title: title,
