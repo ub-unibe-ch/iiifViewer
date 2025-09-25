@@ -16,7 +16,7 @@ This guide explains how to set up and run Cypress integration tests for the IIIF
 
 ## Test Setup
 
-### Configuration for Testing
+#### Configuration for Testing
 
 Update the following settings in `config.inc.php` (copy of `config.TEMPLATE.inc.php`):
 ```
@@ -39,7 +39,7 @@ Create a file named `cypress.env.json` in the root of your project:
 }
 ```
 
-### Before running or re-running all tests 
+#### Before running or re-running all tests 
 - Ensure the `FILESDIR` exists and is empty:
 - installed = Off in `config.inc.php`
 - Create or Recreate the Test Database
@@ -59,16 +59,12 @@ FLUSH PRIVILEGES;
 ```
 ---
 
-##  Run Tests  
-
-### Start the Server
+#### Start the Server
 ```
 php -S localhost:8000
 ```
 
-#### (Only for 3.5 versions)
-install and run sendria:
-
+#### Install and run sendria (Only for 3.5 versions)
 ```
 python3 -m pip install sendria
 sendria --db mails.sqlite
@@ -84,7 +80,10 @@ npx cypress run
 ```
 
 This is needed to setup the test database and create a user admin (with password admin).
-If you jsut need the installation use: npx cypress run --config "specPattern=cypress/tests/data/10-ApplicationSetup/*.cy.{js,ts}" (faster)
+If you only need the installation use: 
+```
+npx cypress run --config "specPattern=cypress/tests/data/10-ApplicationSetup/*.cy.{js,ts}"
+``` 
 
 ---
 
@@ -93,7 +92,7 @@ If you jsut need the installation use: npx cypress run --config "specPattern=cyp
 npx cypress run --config "specPattern=**plugins/generic/**/cypress/tests/**/*.cy.{js,ts}"
 ```
 
-Note use `open` instead of `run` to use the interactive GUI.
+Note: Use `open` instead of `run` to use the interactive GUI.
 
 ---
 
