@@ -1,6 +1,7 @@
-echo "Run cypress tests"
+#!/bin/bash
+set -e
 
-export TERM=xterm
+echo "Run cypress tests"
 npx cypress run --config  '{"specPattern":["plugins/generic/iiifViewer/cypress/tests/functional/*.cy.js"]}'
 
 echo "Validate  against erudit-style"
