@@ -89,6 +89,92 @@ describe('IIIF Viewer tests', function () {
 	});
 
 
+
+	it('Create a submission and check if IIIF Viewer is enabled first part', function () {
+		console.log("TEST LOG1: creating submission");
+		// Login as admin
+		cy.login('admin', 'admin');
+		cy.get('a').contains('admin').click();
+		cy.get('a').contains('Dashboard').click();
+
+		console.log("TEST LOG2: creating submission");
+
+		// Create a new submission
+		cy.getCsrfToken();
+		cy.window()
+			.then(() => {
+				return cy.createSubmissionWithApi(submission, this.csrfToken);
+			})
+			.then(xhr => {
+				return cy.submitSubmissionWithApi(submission.id, this.csrfToken);
+			})
+			.then(xhr => {
+				cy.visit('/index.php/publicknowledge/workflow/index/' + submission.id + '/1');
+			});
+
+		console.log("TEST LOG3: creating submission");
+	});
+
+	it('Create a submission and check if IIIF Viewer is enabled with galleys', function () {
+		console.log("TEST LOG1: creating submission");
+		// Login as admin
+		cy.login('admin', 'admin');
+		cy.get('a').contains('admin').click();
+		cy.get('a').contains('Dashboard').click();
+
+		console.log("TEST LOG2: creating submission");
+
+		// Create a new submission
+		cy.getCsrfToken();
+		cy.window()
+			.then(() => {
+				return cy.createSubmissionWithApi(submission, this.csrfToken);
+			})
+			.then(xhr => {
+				return cy.submitSubmissionWithApi(submission.id, this.csrfToken);
+			})
+			.then(xhr => {
+				cy.visit('/index.php/publicknowledge/workflow/index/' + submission.id + '/1');
+			});
+
+		console.log("TEST LOG3: creating submission");
+
+		//Add galleys
+		for (var i = 0; i < Files.length; i++) {
+			let file = Files[i];
+			cy.openWorkflowMenu('Galleys')
+			cy.get('button:contains("Add galley")').click();
+			cy.waitJQuery();
+
+			cy.get('input[id^=label-]').type(file.name, {delay: 0});
+			cy.get('form#articleGalleyForm button:contains("Save")').click();
+			cy.get('#genreId').select('Research Results');
+			cy.waitJQuery();
+
+			cy.readFile(file.path, null)
+				.then((fileContent) => {
+					// Ensure fileContent is a correct string (JSON should already be valid)
+					var testFixture = Cypress.Buffer.from(fileContent);
+
+					// Upload the file using selectFile
+					cy.get('div[id^="fileUploadWizard"] input[type=file]')
+						.selectFile({
+							contents: testFixture, // JSON content
+							fileName: file.name, // Correct file name
+						}, {force: true}); // Force for hidden file inputs
+				});
+
+			console.log("TEST LOG4: creating submission");
+
+			cy.get('button').contains('Continue').click();
+			cy.get('button').contains('Continue').click();
+			cy.get('button').contains('Complete').click();
+		}
+		;
+
+	});
+
+
 	it('Create a submission and check if IIIF Viewer is enabled in preview', function () {
 		console.log("TEST LOG1: creating submission");
 		// Login as admin
