@@ -14,9 +14,4 @@ export const Files = [
 		path: 'plugins/generic/iiifViewer/cypress/tests/data/IIIF_example.jpg',
 		type: 'image/png'
 	},
-	// {
-	// 	name: 'NotAManifest.json',
-	// 	path: 'plugins/generic/iiifViewer/cypress/tests/data/NotAManifest.json',
-	// 	type:  'text/json'
-	// },
 ];
