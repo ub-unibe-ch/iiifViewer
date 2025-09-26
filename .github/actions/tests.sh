@@ -1,4 +1,8 @@
-echo "Run cypress tests"
-npx cypress run --headless --config '{"specPattern":["plugins/generic/iiifViewer/cypress/tests/functional/*.cy.js"]}'
+#!/bin/bash
+set -e
 
-echo "Validate  against erudit-style"
+echo "Run cypress tests"
+
+npx cypress run --config  '{"specPattern":["plugins/generic/iiifViewer/cypress/tests/functional/*.cy.js"]}'
+
+echo "Done"
