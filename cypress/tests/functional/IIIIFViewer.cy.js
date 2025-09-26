@@ -245,7 +245,6 @@ describe('IIIF Viewer tests', function () {
 
     });
 
-
     it('Check IIIF Viewer enabled when submitted', function () {
         cy.login('admin', 'admin'); // submission.id
 

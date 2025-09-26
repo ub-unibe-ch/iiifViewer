@@ -1,4 +1,4 @@
-on: [push, pull_request]
+on: [ push, pull_request ]
 name: ojs-3.5-stable
 jobs:
   iiifViewer:
