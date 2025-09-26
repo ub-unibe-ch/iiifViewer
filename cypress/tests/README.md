@@ -16,7 +16,7 @@ This guide explains how to set up and run Cypress integration tests for the IIIF
 
 ## Test Setup
 
-### Configuration for Testing
+#### Configuration for Testing
 
 Update the following settings in `config.inc.php` (copy of `config.TEMPLATE.inc.php`):
 ```
@@ -25,15 +25,6 @@ smtp = On
 smtp_server = localhost
 smtp_port = 1025
 ```
-and before each test run with initial setup:
-```
-installed = Off
-```
-Or with linux use:
-```
-sed -i 's/installed = On/installed = Off/' config.inc.php
-```
----
 
 Create a file named `cypress.env.json` in the root of your project:
 ```
@@ -47,39 +38,33 @@ Create a file named `cypress.env.json` in the root of your project:
   "FILESDIR": "files"
 }
 ```
-> Ensure the `FILESDIR` exists:
+
+#### Before running or re-running all tests 
+- Ensure the `FILESDIR` exists and is empty:
+- installed = Off in `config.inc.php`
+- Create or Recreate the Test Database
+
 ```
 mkdir files
-```
----
+rm -rf files/*
+sed -i 's/installed = On/installed = Off/' config.inc.php
 
-### Create or Recreate the Test Database
-
-Open MySQL as root:
-```
-sudo mysql -u root -p
-```
-Then run:
-```
+sudo mysql -u root -p -e "
 DROP DATABASE IF EXISTS pkp_test_db;
 CREATE DATABASE pkp_test_db;
 CREATE USER IF NOT EXISTS 'pkp'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON pkp_test_db.* TO 'pkp'@'localhost';
 FLUSH PRIVILEGES;
-exit;
+"
 ```
 ---
 
-##  Run Tests  
-
-### Start the Server
+#### Start the Server
 ```
 php -S localhost:8000
 ```
 
-#### (Only for 3.5 versions)
-install and run sendria:
-
+#### Install and run sendria (Only for 3.5 versions)
 ```
 python3 -m pip install sendria
 sendria --db mails.sqlite
@@ -95,6 +80,10 @@ npx cypress run
 ```
 
 This is needed to setup the test database and create a user admin (with password admin).
+If you only need the installation use: 
+```
+npx cypress run --config "specPattern=cypress/tests/data/10-ApplicationSetup/*.cy.{js,ts}"
+``` 
 
 ---
 
@@ -103,7 +92,7 @@ This is needed to setup the test database and create a user admin (with password
 npx cypress run --config "specPattern=**plugins/generic/**/cypress/tests/**/*.cy.{js,ts}"
 ```
 
-Note use `open` instead of `run` to use the interactive GUI.
+Note: Use `open` instead of `run` to use the interactive GUI.
 
 ---
 
