@@ -4,10 +4,6 @@
   "extra": {
     "pkp-plugin-name": "iiifViewer"
   },
-  "require": {
-    "ub-unibe-ch/pkp-installer": "*",
-    "pkp/app-implementation": "*"
-  },
   "repositories": [
     {
       "type": "composer",
@@ -21,5 +17,9 @@
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.22"
+  },
+  "require": {
+    "pkp/app-implementation": "^3.4",
+    "ub-unibe-ch/pkp-installer": "^0.0.7"
   }
 }
