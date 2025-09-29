@@ -18,10 +18,10 @@
 	<div class="viewer_return">
 		<a href="{$submissionUrl}" class="return">
 			<span class="pkp_screen_reader">
-				{translate key="catalog.viewableFile.return" monographTitle=$publishedSubmission->getLocalizedTitle()|escape}
+				{translate key="catalog.viewableFile.return" monographTitle=$monographTitle|escape}
 			</span>
 			<span class="iiifviewer_return">
-				{translate key="catalog.viewableFile.return" monographTitle=$publishedSubmission->getLocalizedTitle()|escape}
+				{translate key="catalog.viewableFile.return" monographTitle=$monographTitle|escape}
 			</span>
 		</a>
 	</div>

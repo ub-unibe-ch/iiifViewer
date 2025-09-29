@@ -3,9 +3,16 @@
 ## Description
 OJS and OMP Generic Plugin to integrate the OpenSeadragon and Mirador IIIF Viewers
 
-## Compatibility
-Compatible with OJS/OMP 3.4
-Tested with OJS 3_4_0-4 and OMP 3_4_0-1
+
+### Compatibility
+Compatible with OJS/OMP 3.4 and 3.5
+
+[![ojs-3.4-stable](https://github.com/ub-unibe-ch/iiifViewer/actions/workflows/ojs-3.4-stable.yml/badge.svg)](https://github.com/ub-unibe-ch/iiifViewer/actions/workflows/ojs-3.4-stable.yml)
+[![ojs-3.5-stable](https://github.com/ub-unibe-ch/iiifViewer/actions/workflows/ojs-3.5-stable.yml/badge.svg)](https://github.com/ub-unibe-ch/iiifViewer/actions/workflows/ojs-3.5-stable.yml)
+[![omp-3.4-stable](https://github.com/ub-unibe-ch/iiifViewer/actions/workflows/omp-3.4-stable.yml/badge.svg)](https://github.com/ub-unibe-ch/iiifViewer/actions/workflows/omp-3.4-stable.yml)
+[![omp-3.5-stable](https://github.com/ub-unibe-ch/iiifViewer/actions/workflows/omp-3.5-stable.yml/badge.svg)](https://github.com/ub-unibe-ch/iiifViewer/actions/workflows/omp-3.5-stable.yml)
+
+[//]: # (Tested with OJS 3_4_0-4 and OMP 3_4_0-1)
 
 ## Installation
 Clone a stable branch into plugins --> generic directory or download a released tar file and place the directory there.
