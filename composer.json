@@ -20,6 +20,5 @@
   },
   "require": {
     "pkp/app-implementation": "^3.4",
-    "ub-unibe-ch/pkp-installer": "^0.0.7"
   }
 }
