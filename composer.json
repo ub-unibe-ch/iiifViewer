@@ -19,6 +19,6 @@
     "friendsofphp/php-cs-fixer": "^3.22"
   },
   "require": {
-    "pkp/app-implementation": "^3.4",
+    "pkp/app-implementation": "^3.4"
   }
 }
