@@ -58,8 +58,6 @@ class IiifViewerPlugin extends \PKP\plugins\GenericPlugin
                     case 'omp':
                         Hook::add('CatalogBookHandler::view', [$this, 'ompViewCallback'], HOOK::SEQUENCE_NORMAL);
                         break;
-                    case 'ops':
-                        break;
                     default:
                         throw new \Exception('Unsupported application!');
                 }
@@ -116,14 +114,14 @@ class IiifViewerPlugin extends \PKP\plugins\GenericPlugin
 
         if ($mime_type == 'application/json') {
             $this->viewImageFile($publicationFormat, $submission, $submissionFile, "display_manifest.tpl");
-            return true;
+            return Hook::ABORT;
 
         } elseif (in_array($mime_type, array('image/jpeg', 'image/png'))) {
             $this->viewImageFile($publicationFormat, $submission, $submissionFile, "display.tpl");
-            return true;
+            return Hook::ABORT;
         }
 
-        return false;
+        return Hook::CONTINUE;
     }
 
     function isIIIFManifest(Galley $galley): bool
@@ -180,7 +178,7 @@ class IiifViewerPlugin extends \PKP\plugins\GenericPlugin
             $galleyPublication = null;
             $galleyTemplate = null;
             foreach ($submission->getData('publications') as $publication) {
-                if ($publication->getId() === $galley->getData('publicationId')) {
+                if ($publication->getId() == $galley->getData('publicationId')) {
                     $galleyPublication = $publication;
                     break;
                 }
@@ -190,15 +188,15 @@ class IiifViewerPlugin extends \PKP\plugins\GenericPlugin
                 if ($this->isIIIFManifest($galley)) {
                     $galleyTemplate = 'article_manifest.tpl';
                 } else {
-                    return false; // just some other JSON
+                    return Hook::CONTINUE; // just some other JSON
                 }
             } elseif (in_array($mime_type, array('image/jpeg', 'image/png'))) {
                 $galleyTemplate = 'article_image.tpl';
             } else {
-                return false;
+                return Hook::CONTINUE;
             }
 
-            $isLatestPublication = $submission->getData('currentPublicationId') === $galley->getData('publicationId');
+            $isLatestPublication = $submission->getData('currentPublicationId') == $galley->getData('publicationId');
             $bestId = $submission->getBestId();
             $galleyBestId = $galley->getBestGalleyId();
             $galleyFile = $galley->getFile();
@@ -220,9 +218,9 @@ class IiifViewerPlugin extends \PKP\plugins\GenericPlugin
             ]);
 
             $templateMgr->display($this->getTemplateResource($galleyTemplate));
-            return true;
+            return Hook::ABORT;
         }
-        return false;
+        return Hook::CONTINUE;
     }
 
     /**
@@ -248,12 +246,12 @@ class IiifViewerPlugin extends \PKP\plugins\GenericPlugin
                 if ($this->isIIIFManifest($galley)) {
                     $galleyTemplate = 'issue_manifest.tpl';
                 } else {
-                    return false; // just some other JSON
+                    return Hook::CONTINUE; // just some other JSON
                 }
             } elseif (in_array($mime_type, array('image/jpeg', 'image/png'))) {
                 $galleyTemplate = 'issue_image.tpl';
             } else {
-                return false;
+                return Hook::CONTINUE;
             }
 
             $issueBestId = $issue->getBestIssueId();
@@ -272,9 +270,9 @@ class IiifViewerPlugin extends \PKP\plugins\GenericPlugin
             ]);
 
             $templateMgr->display($this->getTemplateResource($galleyTemplate));
-            return true;
+            return Hook::ABORT;
         }
-        return false;
+        return Hook::CONTINUE;
     }
 
 
@@ -291,7 +289,7 @@ class IiifViewerPlugin extends \PKP\plugins\GenericPlugin
     {
 
         foreach ($submission->getData('publications') as $publication) {
-            if ($publication->getId() === $publicationFormat->getData('publicationId')) {
+            if ($publication->getId() == $publicationFormat->getData('publicationId')) {
                 $filePublication = $publication;
                 break;
             }
@@ -325,7 +323,7 @@ class IiifViewerPlugin extends \PKP\plugins\GenericPlugin
         $templateMgr->assign(array(
             'apiUrl' => $apiUrl,
             'pluginUrl' => $request->getBaseUrl() . '/' . $this->getPluginPath(),
-            'isLatestPublication' => $submission->getData('currentPublicationId') === $publicationFormat->getData('publicationId'),
+            'isLatestPublication' => $submission->getData('currentPublicationId') == $publicationFormat->getData('publicationId'),
             'monographTitle' => $monographTitle,
         ));
 
