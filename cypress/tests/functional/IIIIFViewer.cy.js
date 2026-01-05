@@ -2,16 +2,12 @@
  * Integration tests for the IIIF Viewer plugin.
  */
 
-<<<<<<< HEAD
 import {Files} from '../files.js';
-=======
-import { Files } from '../files.js';
->>>>>>> 2e072f89f1c634b8dcb2f9b302e398855807b5e5
 
 describe('IIIF Viewer tests', function () {
     var title = "IIIF Viewer Test Submission TEST";
 
-<<<<<<< HEAD
+
     var submission = {
         section: 'Articles',
         sectionId: 1,
@@ -50,41 +46,6 @@ describe('IIIF Viewer tests', function () {
         cy.get('#openseadragon1 .openseadragon-container')
             .should('exist')
             .and('be.visible');
-=======
-	var submission = {
-		section: 'Articles',
-		sectionId: 1,
-		title: title,
-		abstract: 'Test Submission to check if IIIF Viewers are working.',
-		subtitle: '',
-		authors: ["IIIF Viewer Test Author"],
-		submitterRole: 'Journal manager',
-		files: [
-			{
-				'file': 'dummy.pdf',
-				'fileName': 'IIIFViewerTest.pdf',
-				'mimeType': 'application/pdf',
-				'genre': Cypress.env('defaultGenre')
-			}
-		],
-		identifiers: {
-			pageNumber: '71-98',
-		},
-		urlPath: 'testing-iiif-viewer-submission-' + Cypress._.uniqueId(Date.now().toString()),
-
-		licenceUrl: 'https://creativecommons.org/licenses/by/4.0/',
-		publishIssueSections: [
-			'Articles'
-		],
-		galleys: [
-			{
-				label: 'PDF',
-				genre: 'Article Text',
-				mimeType: 'application/pdf',
-			}
-		],
-	};
->>>>>>> 2e072f89f1c634b8dcb2f9b302e398855807b5e5
 
         //  Check the JS library is loaded
         cy.window().then(win => {
@@ -110,15 +71,6 @@ describe('IIIF Viewer tests', function () {
 
     };
 
-    it('Enable The Plugin', function () {
-        cy.login('admin', 'admin', 'publicknowledge');
-
-<<<<<<< HEAD
-        cy.get('nav').contains('Settings').click();
-        // Ensure submenu item click despite animation
-        cy.get('nav').contains('Website').click({force: true});
-        cy.get('button[id="plugins-button"]').click();
-=======
 	it('Enable The Plugin', function() {
 		cy.login('admin', 'admin', 'publicknowledge');
 
@@ -137,8 +89,6 @@ describe('IIIF Viewer tests', function () {
 
 
 	it('Create a submission', function () {
->>>>>>> 2e072f89f1c634b8dcb2f9b302e398855807b5e5
-
         cy.get('input[id^="select-cell-iiifviewerplugin-enabled"]').then(($checkbox) => {
             if (!$checkbox.prop('checked')) {
                 cy.wrap($checkbox).click();
