@@ -35,4 +35,5 @@ https://github.com/ub-unibe-ch/iiifViewer/issues
 
 ## Developer
 https://github.com/pjwest
+https://github.com/althausLuca
 
