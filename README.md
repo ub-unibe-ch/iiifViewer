@@ -34,6 +34,6 @@ iiif manifests trigger Mirador [iiif example file](/ex_iiif_manifest.json)
 https://github.com/ub-unibe-ch/iiifViewer/issues
 
 ## Developer
-https://github.com/pjwest
+https://github.com/pjwest<br>
 https://github.com/althausLuca
 
